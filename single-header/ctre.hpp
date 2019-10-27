@@ -3275,8 +3275,8 @@ constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, c
 		}
 	}
 	
-	if (auto outer_result = evaluate(begin, current, end, captures, ctll::list<Tail...>())) {
-		return outer_result;
+	if (auto _outer_result = evaluate(begin, current, end, captures, ctll::list<Tail...>())) {
+		return _outer_result;
 	} else {
 		for (; (i < B) || (B == 0); ++i) {
 			if (auto inner_result = evaluate(begin, current, end, captures, ctll::list<sequence<Content...>, end_cycle_mark>())) {
@@ -3844,7 +3844,7 @@ template <typename BeginIterator, typename EndIterator, typename RE> struct rege
 	const EndIterator end;
 	decltype(RE::search_2(std::declval<BeginIterator>(), std::declval<EndIterator>())) current_match;
 
-	constexpr regex_iterator(BeginIterator begin, EndIterator end) noexcept: current{begin}, end{end}, current_match{RE::search_2(current, end)} {
+	constexpr regex_iterator(BeginIterator begin, EndIterator _end) noexcept: current{begin}, end{_end}, current_match{RE::search_2(current, _end)} {
 		if (current_match) {
 			current = current_match.template get<0>().end();
 		}
