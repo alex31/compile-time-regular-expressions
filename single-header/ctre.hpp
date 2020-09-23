@@ -3342,6 +3342,8 @@ constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, c
 }
 
 // possessive repeat
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"
 template <typename R, typename Iterator, typename EndIterator, size_t A, size_t B, typename... Content, typename... Tail> 
 constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, const EndIterator end, R captures, ctll::list<possessive_repeat<A,B,Content...>, Tail...>) noexcept {
 
@@ -3394,7 +3396,8 @@ constexpr inline R evaluate_recursive(size_t i, const Iterator begin, Iterator c
 	return evaluate(begin, current, end, captures, ctll::list<Tail...>());
 	#endif
 }	
-
+#pragma GCC diagnostic pop
+ 
 // (gready) repeat optimization
 // basic one, if you are at the end of RE, just change it into possessive
 // TODO do the same if there is no collision with rest of the RE
@@ -3405,7 +3408,10 @@ constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, c
 
 template <typename... T> struct identify_type;
 
-// (greedy) repeat 
+// (greedy) repeat
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"
+
 template <typename R, typename Iterator, typename EndIterator, size_t A, size_t B, typename... Content, typename... Tail> 
 constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, const EndIterator end, R captures, [[maybe_unused]] ctll::list<repeat<A,B,Content...>, Tail...> stack) {
 	// check if it can be optimized
@@ -3437,7 +3443,8 @@ constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, c
 #endif
 
 }
-
+#pragma GCC diagnostic pop
+ 
 // repeat lazy_star
 template <typename R, typename Iterator, typename EndIterator, typename... Content, typename... Tail> 
 constexpr CTRE_FORCE_INLINE R evaluate(const Iterator begin, Iterator current, const EndIterator end, R captures, ctll::list<lazy_star<Content...>, Tail...>) noexcept {
